@@ -224,7 +224,7 @@ This method basically uses Gpredict compatibility with `rotctld` as a data pass-
 >
 > ```bash
 > user@machine ~
-> $ rotctld
+> $ rotctld &
 > ```
 >
 > 5. Go to Menu > Antenna Control, and select the desired satellite;
@@ -299,14 +299,14 @@ VARIABLE gpredict_port 4533
 
 # Set target interface
 TARGET GPREDICT <%= gpredict_target_name %>
-INTERFACE <%= gpredict_target_name %>_INT openc3/interfaces/tcpip_client_interface.py <%= gpredict_host %> <%= gpredict_port %> <%= gpredict_port %> 10.0 None BURST
+INTERFACE <%= gpredict_target_name %>_INT openc3/interfaces/tcpip_client_interface.py <%= gpredict_host %> <%= gpredict_port %> <%= gpredict_port %> 5.0 5.0 BURST
   MAP_TARGET <%= gpredict_target_name %>
 ```
 
 The target name, host, and port were defined as variables to allow customization in web GUI, if intended. Consequently, the TCP/IP client interface setup was done with respect to the host and port variables. Three arguments are required on the `INTERFACE` after the port number: 
 
-1. Write timeout: set to `10.0` seconds, as default;
-2. Read timeout: set to `None`, as default, so that the communication is blocked until data is received;
+1. Write timeout: set to `5.0` seconds;
+2. Read timeout: set to `5.0` seconds;
 3. Protocol: set to `BURST`, as default, so that it reads as much data as it can from the interface before returning the data.
 
 The host was defaulted to `host.docker.internal`, instead of `localhost`, as it is containerized.
@@ -347,3 +347,14 @@ Once the plugin is loaded to COSMOS, we shall obtain the satellite position from
 3. Finally, go to Packet Viewer side tab, select the `GPREDICT` target and `SAT_POS_AZEL` telemetry packet, where all items should be successfully parsed and displayed;
 
 4. These will be very similar to the ones on Gpredict, with the exception of the delay offset of transmission and the defined time and step thresholds.
+
+This process can be improved by automatizing the sending of commands, and by plotting the received telemetry.
+
+5. Go to the Script Runner, create a loop to send the command, and hit Run.
+
+```python
+while True:
+  cmd("GPREDICT SAT_POS_AZEL_CMD with ID '-p'")
+  wait(5)
+```
+6. Then, go to Telemetry Grapher, select the converted `AZ` and `EL` items and add each  to the plot. A new data point should be drawn at a 5 seconds interval.

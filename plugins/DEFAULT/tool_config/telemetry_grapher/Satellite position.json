@@ -1,0 +1,39 @@
+{
+  "settings": {
+    "secondsGraphed": 1000,
+    "pointsSaved": 1000000,
+    "pointsGraphed": 1000,
+    "refreshIntervalMs": 100
+  },
+  "graphs": [
+    {
+      "items": [
+        {
+          "targetName": "GPREDICT",
+          "packetName": "SAT_POS_AZEL",
+          "itemName": "AZ",
+          "valueType": "CONVERTED",
+          "reduced": "DECOM",
+          "reducedType": "AVG",
+          "color": "#938bdb",
+          "limits": []
+        },
+        {
+          "targetName": "GPREDICT",
+          "packetName": "SAT_POS_AZEL",
+          "itemName": "EL",
+          "valueType": "CONVERTED",
+          "reduced": "DECOM",
+          "reducedType": "AVG",
+          "color": "#4dacff",
+          "limits": []
+        }
+      ],
+      "title": "Graph 0",
+      "fullWidth": true,
+      "fullHeight": true,
+      "legendPosition": "bottom",
+      "lines": []
+    }
+  ]
+}
