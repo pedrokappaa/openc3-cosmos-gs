@@ -1,6 +1,6 @@
 # OpenC3 COSMOS Ground Station
 
-OpenC3 COSMOS is a cloud native, containerized, microservice oriented command and control system, enabling an all-in-one management platform, especially for space missions.
+OpenC3 COSMOS is a cloud native, containerized, microservice oriented command and control system, enabling an all-in-one management platform, especially for space missions. This repository will host the files and documentation required to build a custom ground station for a satellite mission.
 
 A few concepts are required to understand COSMOS. These are detailed below, following the [official documentation](https://docs.openc3.com/docs/configuration):
 
@@ -122,12 +122,14 @@ Following the [COSMOS installation guide](https://docs.openc3.com/docs/getting-s
 > user@machine ~
 > $ git clone https://github.com/OpenC3/cosmos-project.git
 > ```
->
+
+Alternatively, this repo can be also be cloned, as it is a `cosmos-project` fork.
+
 > 2. Add the locally cloned project directory to your PATH:
 >
 > ```bash
 > user@machine ~
-> $ export PATH=~/cosmos-project:$PATH
+> $ export PATH=~/openc3-cosmos-gs:$PATH
 > ```
 >
 > 3. Verify if COSMOS services are running smoothly:
@@ -172,9 +174,9 @@ Following its [installation guide](https://hamlib.sourceforge.net/manuals/1.2.15
 
 ## Setting up a new COSMOS project
 
-After installing OpenC3 COSMOS and launching the GUI, a demo plugin comes already installed in the project template to help the user get accomodated to the platform capabilities. We will leverage the downloaded project template for our application, however, a clean start is desired, so before implementing any developments, the demo plugin should be disabled:
+After installing OpenC3 COSMOS and launching the GUI, a demo plugin comes already installed in the project template to help the user get accomodated to the platform capabilities. We will leverage the project template for our application, however, a clean start is desired, so before implementing any developments, the demo plugin should be disabled:
 
-1. Go to `/cosmos-project` folder and open `.env` file;
+1. Go to `/openc3-cosmos-gs` folder and open `.env` file;
 
 2. Comment `OPENC3_DEMO` variable on line 6:
 ```bash
@@ -190,7 +192,7 @@ Following the [documentation](https://docs.openc3.com/docs/getting-started/getti
 > 1. Use the COSMOS plugin generator to create the correct structure:
 >
 >```bash
->user@machine ~/cosmos-project
+>user@machine ~/openc3-cosmos-gs
 >$ openc3.sh cli generate plugin gpredict --python
 >```
 
@@ -318,7 +320,7 @@ Finally, we can build our plugin and upload it to COSMOS. First, the `.gemspec` 
 > 1. Build the plugin, specifying its version: 
 >
 >```bash
-> user@machine ~/cosmos-project/openc3-cosmos-gpredict
+> user@machine ~/openc3-cosmos-gs/openc3-cosmos-gpredict
 > $ openc3.sh cli rake build VERSION=1.0.0
 >```
 >

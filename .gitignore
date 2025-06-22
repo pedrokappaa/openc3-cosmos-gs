@@ -47,3 +47,5 @@ yarn-error.log*
 node_modules
 
 typescript
+
+todo.txt
