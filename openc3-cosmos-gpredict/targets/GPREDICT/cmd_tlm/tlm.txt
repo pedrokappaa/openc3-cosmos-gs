@@ -1,0 +1,9 @@
+TELEMETRY GPREDICT SAT_POS_AZEL BIG_ENDIAN "Satellite position"
+  # Keyword       Name    BitSize Type    Default     Description
+  APPEND_ID_ITEM  ID      64      STRING  "get_pos:"  "Position packet identifier"
+  APPEND_ITEM     AZ_STR  128     STRING              "Azimuth string data"    
+  APPEND_ITEM     EL_STR  0       STRING              "Elevation string data"
+  ITEM            AZ      0 0     DERIVED             "Azimuth"
+    READ_CONVERSION azimuth_conversion.py
+  ITEM            EL      0 0     DERIVED             "Elevation"
+    READ_CONVERSION elevation_conversion.py

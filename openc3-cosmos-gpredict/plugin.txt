@@ -1,0 +1,9 @@
+# Set VARIABLEs to allow variation in your plugin
+VARIABLE gpredict_target_name GPREDICT
+VARIABLE gpredict_host host.docker.internal
+VARIABLE gpredict_port 4533
+
+# Set target interface
+TARGET GPREDICT <%= gpredict_target_name %>
+INTERFACE <%= gpredict_target_name %>_INT openc3/interfaces/tcpip_client_interface.py <%= gpredict_host %> <%= gpredict_port %> <%= gpredict_port %> 10.0 None BURST
+  MAP_TARGET <%= gpredict_target_name %>

@@ -1,0 +1,21 @@
+{
+  "name": "openc3-cosmos-gpredict-1.0.0.gem__20250622185638",
+  "variables": {
+    "gpredict_target_name": "GPREDICT",
+    "gpredict_host": "host.docker.internal",
+    "gpredict_port": "4533"
+  },
+  "plugin_txt_lines": [
+    "# Set VARIABLEs to allow variation in your plugin",
+    "VARIABLE gpredict_target_name GPREDICT",
+    "VARIABLE gpredict_host host.docker.internal",
+    "VARIABLE gpredict_port 4533",
+    "",
+    "# Set target interface",
+    "TARGET GPREDICT <%= gpredict_target_name %>",
+    "INTERFACE <%= gpredict_target_name %>_INT openc3/interfaces/tcpip_client_interface.py <%= gpredict_host %> <%= gpredict_port %> <%= gpredict_port %> 10.0 None BURST",
+    "  MAP_TARGET <%= gpredict_target_name %>"
+  ],
+  "needs_dependencies": true,
+  "updated_at": 1750618603021653042
+}
