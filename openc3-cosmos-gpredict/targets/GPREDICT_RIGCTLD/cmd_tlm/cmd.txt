@@ -1,0 +1,3 @@
+COMMAND GPREDICT_ROTCTLD SAT_FREQ_DPLR_CMD BIG_ENDIAN "Request satellite doppler-corrected frequency"
+  # Keyword           Name  BitSize Type   Min Max  Default  Description
+  APPEND_ID_PARAMETER ID    0       STRING          "-f"     "Get frequency argument"

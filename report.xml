@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dfxml xmloutputversion='1.0'>
+  <metadata 
+  xmlns='http://afflib.org/tcpflow/' 
+  xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' 
+  xmlns:dc='http://purl.org/dc/elements/1.1/'>
+    <dc:type>Feature Extraction</dc:type>
+  </metadata>
+  <creator version='1.0'>
+    <program>TCPFLOW</program>
+    <version>1.6.1</version>
+    <build_environment>
+      <compiler>11.2.0 (11.2.0)</compiler>
+      <CPPFLAGS>-I/usr/local/include -Wdate-time -D_FORTIFY_SOURCE=2 -I/usr/local/include -DUTC_OFFSET=+0000</CPPFLAGS>
+      <CFLAGS>-g -g -O3 -ffile-prefix-map=/build/tcpflow-WmFafb/tcpflow-1.6.1=. -flto=auto -ffat-lto-objects -fstack-protector-strong -Wformat -Werror=format-security -MD -Wpointer-arith -Wmissing-declarations -Wmissing-prototypes -Wshadow -Wwrite-strings -Wcast-align -Waggregate-return -Wbad-function-cast -Wcast-qual -Wundef -Wredundant-decls -Wdisabled-optimization -Wfloat-equal -Wmultichar -Wc++-compat -Wmissing-noreturn -Wall -Wstrict-prototypes -MD -D_FORTIFY_SOURCE=2 -Wpointer-arith -Wmissing-declarations -Wmissing-prototypes -Wshadow -Wwrite-strings -Wcast-align -Waggregate-return -Wbad-function-cast -Wcast-qual -Wundef -Wredundant-decls -Wdisabled-optimization -Wfloat-equal -Wmultichar -Wc++-compat -Wmissing-noreturn -Wall -Wstrict-prototypes</CFLAGS>
+      <CXXFLAGS>-g -g -O3 -ffile-prefix-map=/build/tcpflow-WmFafb/tcpflow-1.6.1=. -flto=auto -ffat-lto-objects -fstack-protector-strong -Wformat -Werror=format-security -Wall -MD -D_FORTIFY_SOURCE=2 -Wpointer-arith -Wshadow -Wwrite-strings -Wcast-align -Wredundant-decls -Wdisabled-optimization -Wfloat-equal -Wmultichar -Wmissing-noreturn -Woverloaded-virtual -Wsign-promo -funit-at-a-time -Weffc++ -Wno-address-of-packed-member</CXXFLAGS>
+      <LDFLAGS>-L/usr/local/lib -Wl,-Bsymbolic-functions -flto=auto -Wl,-z,relro -L/usr/local/lib</LDFLAGS>
+      <LIBS>-lpcap -lcairo -lfontconfig -lfreetype -lpixman-1 -lexpat -lcrypto -lssl -lcrypto -ldl -lz </LIBS>
+      <compilation_date>2021-11-24T11:01:14</compilation_date>
+      <library name="boost" version="107400"/>
+    </build_environment>
+    <execution_environment>
+      <os_sysname>Linux</os_sysname>
+      <os_release>6.8.0-60-generic</os_release>
+      <os_version>#63~22.04.1-Ubuntu SMP PREEMPT_DYNAMIC Tue Apr 22 19:00:15 UTC 2</os_version>
+      <host>kappaa-XMG-NEO-15-XNE15M18</host>
+      <arch>x86_64</arch>
+      <command_line>command line to be provided</command_line>
+      <uid>0</uid>
+      <username>root</username>
+      <start_time>2025-06-24T02:10:53Z</start_time>
+    </execution_environment>
+  </creator>
+  <configuration>
+  </configuration>
+  <tdelta>0</tdelta>
+  <configuration>
+    <fileobject>
+      <filename>127.000.000.001.04532-127.000.000.001.34698</filename>
+      <filesize>108</filesize>
+      <tcpflow startime='2025-06-24T02:10:53.793154Z' endtime='2025-06-24T02:10:56.841709Z' mac_daddr='00:00:03:04:00:06' family='2' src_ipn='127.0.0.1' dst_ipn='127.0.0.1' srcport='4532' dstport='34698' packets='18' len='1332' />
+    </fileobject>
+    <fileobject>
+      <filename>127.000.000.001.34698-127.000.000.001.04532</filename>
+      <filesize>68</filesize>
+      <tcpflow startime='2025-06-24T02:10:53.792686Z' endtime='2025-06-24T02:10:56.841495Z' mac_daddr='00:00:03:04:00:06' family='2' src_ipn='127.0.0.1' dst_ipn='127.0.0.1' srcport='34698' dstport='4532' packets='19' len='1360' />
+    </fileobject>
+  </configuration>
+  <summary />
+  <open_fds_at_end>0</open_fds_at_end>
+  <max_open_flows>0</max_open_flows>
+  <total_flows>2</total_flows>
+  <flow_map_size>2</flow_map_size>
+  <total_packets>37</total_packets>
+  <rusage>
+    <utime>0.022266</utime>
+    <stime>0.021094</stime>
+    <maxrss>13568</maxrss>
+    <minflt>1316</minflt>
+    <majflt>61</majflt>
+    <nswap>0</nswap>
+    <inblock>16920</inblock>
+    <oublock>8</oublock>
+    <clocktime>3.598766</clocktime>
+  </rusage>
+</dfxml>

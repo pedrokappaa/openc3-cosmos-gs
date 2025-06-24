@@ -1,8 +1,8 @@
 # OpenC3 COSMOS Ground Station
 
-OpenC3 COSMOS is a cloud native, containerized, microservice oriented command and control system, enabling an all-in-one management platform, especially for space missions. This repository will host the files and documentation required to build a custom ground station for a satellite mission.
+OpenC3 COSMOS is a cloud native, containerized, microservice oriented command and control system, enabling an all-in-one management platform. This repository will host the files and documentation required to build a custom ground station for a ghost satellite mission.
 
-A few concepts are required to understand COSMOS. These are detailed below, following the [official documentation](https://docs.openc3.com/docs/configuration):
+A few concepts are required to understand COSMOS. A short summary was written based on the [official documentation](https://docs.openc3.com/docs/configuration):
 
 > - Plugins: how you configure and extend COSMOS. Plugins define targets, their communication properties, and configure the interfaces needed to talk to them. Each plugin is built as a Ruby gem and thus has a `plugin.gemspec` file which builds it. Plugins have a `plugin.txt` file which declares all the variables used by the plugin and how to interface to the target it contains.
 >

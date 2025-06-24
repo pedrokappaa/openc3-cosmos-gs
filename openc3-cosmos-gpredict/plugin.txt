@@ -1,9 +1,31 @@
+## ROTCTLD interface
+
 # Set VARIABLEs to allow variation in your plugin
-VARIABLE gpredict_target_name GPREDICT
-VARIABLE gpredict_host host.docker.internal
-VARIABLE gpredict_port 4533
+VARIABLE gpredict_rotctld_target_name GPREDICT_ROTCTLD
+VARIABLE gpredict_rotctld_host host.docker.internal
+VARIABLE gpredict_rotctld_port 4533
 
 # Set target interface
-TARGET GPREDICT <%= gpredict_target_name %>
-INTERFACE <%= gpredict_target_name %>_INT openc3/interfaces/tcpip_client_interface.py <%= gpredict_host %> <%= gpredict_port %> <%= gpredict_port %> 5.0 5.0 BURST
-  MAP_TARGET <%= gpredict_target_name %>
+TARGET GPREDICT_ROTCTLD <%= gpredict_rotctld_target_name %>
+INTERFACE <%= gpredict_rotctld_target_name %>_INT openc3/interfaces/tcpip_client_interface.py  <%= gpredict_rotctld_host %> <%= gpredict_rotctld_port %> <%= gpredict_rotctld_port %> 5.0 5.0 BURST
+  MAP_TARGET <%= gpredict_rotctld_target_name %>
+
+## RIGCTLD RX interface
+
+VARIABLE gpredict_rigctld_target_name_rx GPREDICT_RIGCTLD_RX
+VARIABLE gpredict_rigctld_host_rx host.docker.internal
+VARIABLE gpredict_rigctld_port_rx 4532
+
+TARGET GPREDICT_RIGCTLD <%= gpredict_rigctld_target_name_rx %>
+INTERFACE <%= gpredict_rigctld_target_name_rx %>_INT openc3/interfaces/tcpip_client_interface.py <%= gpredict_rigctld_host_rx %> <%= gpredict_rigctld_port_rx %> <%= gpredict_rigctld_port_rx %> 5.0 5.0 BURST
+  MAP_TARGET <%= gpredict_rigctld_target_name_rx %>
+
+## RIGCTLD TX interface
+
+VARIABLE gpredict_rigctld_target_name_tx GPREDICT_RIGCTLD_TX
+VARIABLE gpredict_rigctld_host_tx host.docker.internal
+VARIABLE gpredict_rigctld_port_tx 4531
+
+TARGET GPREDICT_RIGCTLD <%= gpredict_rigctld_target_name_tx %>
+INTERFACE <%= gpredict_rigctld_target_name_tx %>_INT openc3/interfaces/tcpip_client_interface.py <%= gpredict_rigctld_host_tx %> <%= gpredict_rigctld_port_tx %> <%= gpredict_rigctld_port_tx %> 5.0 5.0 BURST
+  MAP_TARGET <%= gpredict_rigctld_target_name_tx %>

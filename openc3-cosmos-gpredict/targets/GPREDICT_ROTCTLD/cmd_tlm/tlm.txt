@@ -1,4 +1,4 @@
-TELEMETRY GPREDICT SAT_POS_AZEL BIG_ENDIAN "Satellite position"
+TELEMETRY GPREDICT_ROTCTLD SAT_POS_AZEL_PKT BIG_ENDIAN "Satellite position"
   # Keyword       Name    BitSize Type    Default     Description
   APPEND_ID_ITEM  ID      64      STRING  "get_pos:"  "Position packet identifier"
   APPEND_ITEM     AZ_STR  128     STRING              "Azimuth string data"    

@@ -1,3 +1,0 @@
-COMMAND GPREDICT SAT_POS_AZEL_CMD BIG_ENDIAN "Request satellite position"
-  # Keyword           Name  BitSize Type   Min Max  Default  Description
-  APPEND_ID_PARAMETER ID    0       STRING          "-p"     "Position argument"
