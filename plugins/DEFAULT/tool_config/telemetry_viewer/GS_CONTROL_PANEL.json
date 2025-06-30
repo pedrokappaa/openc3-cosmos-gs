@@ -1,0 +1,34 @@
+[
+  {
+    "screen": "POS_AZEL",
+    "target": "GPREDICT_ROTCTLD",
+    "floated": false,
+    "top": 0,
+    "left": 0,
+    "zIndex": 0
+  },
+  {
+    "screen": "POS_STATUS",
+    "target": "GPREDICT_ROTCTLD",
+    "floated": false,
+    "top": 0,
+    "left": 0,
+    "zIndex": 0
+  },
+  {
+    "screen": "FREQ_DPLR",
+    "target": "GPREDICT_RIGCTLD_RX",
+    "floated": false,
+    "top": 0,
+    "left": 0,
+    "zIndex": 0
+  },
+  {
+    "screen": "FREQ_DPLR",
+    "target": "GPREDICT_RIGCTLD_TX",
+    "floated": false,
+    "top": 0,
+    "left": 0,
+    "zIndex": 0
+  }
+]

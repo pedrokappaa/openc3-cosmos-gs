@@ -1,6 +1,12 @@
 TELEMETRY GPREDICT_ROTCTLD SAT_FREQ_DPLR_PKT BIG_ENDIAN "Satellite satellite doppler-corrected frequency"
-  # Keyword       Name      BitSize Type    Default     Description
-  APPEND_ID_ITEM  ID        72      STRING  "get_freq:" "Position packet identifier"
-  APPEND_ITEM     FREQ_STR  0       STRING              "Frequency string data"    
-  ITEM            FREQ_DPLR 0 0     DERIVED             "Frequency doppler-corrected"
+  # Keyword       Name          BitSize Type    Default     Description
+  APPEND_ID_ITEM  ID            72      STRING  "get_freq:" "Position packet identifier"
+  APPEND_ITEM     FREQ_STR      0       STRING              "Frequency string data"    
+  ITEM            FREQ_DPLR_EXT 0 0     DERIVED             "Frequency doppler-corrected (exact)"
     READ_CONVERSION frequency_conversion.py
+    UNITS Hertz Hz
+  ITEM            FREQ_DPLR     0 0     DERIVED             "Frequency doppler-corrected (displayed)"
+    GENERIC_READ_CONVERSION_START FLOAT 32
+      packet.read('FREQ_DPLR_EXT') / 1000000
+    GENERIC_READ_CONVERSION_END
+    UNITS MegaHertz MHz

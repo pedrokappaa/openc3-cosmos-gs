@@ -1,5 +1,5 @@
 {
-  "name": "openc3-cosmos-gpredict-1.1.1.gem__20250624035758",
+  "name": "openc3-cosmos-gpredict-1.2.1.gem__20250630200516",
   "variables": {
     "gpredict_rotctld_target_name": "GPREDICT_ROTCTLD",
     "gpredict_rotctld_host": "host.docker.internal",
@@ -45,5 +45,5 @@
     "  MAP_TARGET <%= gpredict_rigctld_target_name_tx %>"
   ],
   "needs_dependencies": true,
-  "updated_at": 1750737481982958044
+  "updated_at": 1751313920634820019
 }

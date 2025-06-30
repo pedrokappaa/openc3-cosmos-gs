@@ -5,5 +5,22 @@ TELEMETRY GPREDICT_ROTCTLD SAT_POS_AZEL_PKT BIG_ENDIAN "Satellite position"
   APPEND_ITEM     EL_STR  0       STRING              "Elevation string data"
   ITEM            AZ      0 0     DERIVED             "Azimuth"
     READ_CONVERSION azimuth_conversion.py
+    UNITS Degrees deg
   ITEM            EL      0 0     DERIVED             "Elevation"
     READ_CONVERSION elevation_conversion.py
+    UNITS Degrees deg
+
+TELEMETRY GPREDICT_ROTCTLD SAT_POS_STATUS BIG_ENDIAN "Satellite position status"
+  # Keyword       Name      BitSize Type    Default     Description
+  APPEND_ITEM     AOS       32      UINT                "Aquisition of signal"
+    STATE FALSE 0 YELLOW
+    STATE TRUE 1  YELLOW
+    STATE ERROR ANY
+  APPEND_ITEM     ON_SIGHT  32      UINT                "Signal on sight"
+    STATE FALSE 0 YELLOW
+    STATE TRUE 1  YELLOW
+    STATE ERROR ANY
+  APPEND_ITEM     LOS       32      UINT                "Loss of signal"
+    STATE FALSE 0 YELLOW
+    STATE TRUE 1  YELLOW
+    STATE ERROR ANY
