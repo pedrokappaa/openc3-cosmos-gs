@@ -1,0 +1,42 @@
+TELEMETRY GNURADIO SAT_BEACON_PKT LITTLE_ENDIAN "Satellite beacon packet"
+  # Keyword       Name          BitSize Type  Default   Description
+  APPEND_ITEM     LENGTH        8       UINT            "Payload length"
+  APPEND_ITEM     DESTINATION   8       UINT            "Destination address"
+  APPEND_ITEM     NODE          8       UINT            "Source address"
+  APPEND_ITEM     IDENTIFIER    8       UINT            "Identifiers"
+  APPEND_ITEM     FLAGS         8       UINT            "Flags"
+  APPEND_ID_ITEM  PACKET_ID     8       UINT  "2"       "Packet type ID"
+  APPEND_ITEM     STATE_INDEX   8       UINT            "System state index"
+  APPEND_ITEM     SAT_FLAGS     8       UINT            "Beacon flags"
+  APPEND_ITEM     ERR_COUNT     16      UINT            "Software error count"
+  APPEND_ITEM     BOOT_COUNT    16      UINT            "Boot count"
+  APPEND_ITEM     PAD_BYTE      16      UINT            "Padding"
+  APPEND_ITEM     BATT_V        32      FLOAT           "Battery voltage"
+    UNITS Voltage V
+  APPEND_ITEM     CPU_TEMP      32      FLOAT           "CPU temperature"
+    UNITS Celsius C
+  APPEND_ITEM     IMU_TEMP      32      FLOAT           "IMU temperature"
+    UNITS Celsius C
+  APPEND_ITEM     GYRO_0        32      FLOAT           "Gyroscope X"
+    UNITS RadiansPerSecond rad/s
+  APPEND_ITEM     GYRO_1        32      FLOAT           "Gyroscope Y"
+    UNITS RadiansPerSecond rad/s
+  APPEND_ITEM     GYRO_2        32      FLOAT           "Gyroscope Z"
+    UNITS RadiansPerSecond rad/s
+  APPEND_ITEM     MAG_0         32      FLOAT           "Magnetometer X"
+    UNITS NanoTestas nT
+  APPEND_ITEM     MAG_1         32      FLOAT           "Magnetometer Y"
+    UNITS NanoTestas nT
+  APPEND_ITEM     MAG_2         32      FLOAT           "Magnetometer Z"
+    UNITS NanoTestas nT
+  APPEND_ITEM     ACCEL_0       32      FLOAT           "Accelerometer X"
+    UNITS MetersPerSecondSquared m/s2
+  APPEND_ITEM     ACCEL_1       32      FLOAT           "Accelerometer Y"
+    UNITS MetersPerSecondSquared m/s2
+  APPEND_ITEM     ACCEL_2       32      FLOAT           "Accelerometer Z"
+    UNITS MetersPerSecondSquared m/s2
+  APPEND_ITEM     RSSI_DB       32      FLOAT           "Signal strength"
+    UNITS deciBel dB
+  APPEND_ITEM     FEI_HZ        32      FLOAT           "Frequency error"
+    UNITS Hertz Hz
+  APPEND_ITEM     CHECKSUM      16      UINT            "Checksum"

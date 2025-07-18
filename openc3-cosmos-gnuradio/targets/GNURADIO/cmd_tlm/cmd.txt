@@ -1,0 +1,17 @@
+COMMAND GNURADIO START_REC_CMD BIG_ENDIAN "Start radio recording"
+  # Keyword           Name  BitSize Type    Min  Max  Default       Description
+  APPEND_ID_PARAMETER ID    0       STRING            "aos"         "Aquisition of signal key"
+
+COMMAND GNURADIO STOP_REC_CMD BIG_ENDIAN "Start radio recording"
+  # Keyword           Name  BitSize Type    Min  Max  Default       Description
+  APPEND_ID_PARAMETER ID    0       STRING            "los"         "Loss of signal key"
+
+COMMAND GNURADIO UPDT_FREQ_RX_CMD BIG_ENDIAN "Update receiving frequency"
+  # Keyword           Name  BitSize Type    Min  Max  Default       Description
+  APPEND_ID_PARAMETER ID    64      STRING            "freq_rx "    "Frequency RX key"
+  APPEND_PARAMETER    FREQ  0       STRING            "437400000"   "Frequency RX value"
+
+COMMAND GNURADIO UPDT_FREQ_TX_CMD BIG_ENDIAN "Update receiving frequency"
+  # Keyword           Name  BitSize Type    Min  Max  Default       Description
+  APPEND_ID_PARAMETER ID    64      STRING            "freq_tx "    "Frequency TX key"
+  APPEND_PARAMETER    FREQ  0       STRING            "144700000"   "Frequency TX value"

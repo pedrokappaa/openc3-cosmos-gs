@@ -2,10 +2,10 @@
 
 # Create the overall gemspec
 Gem::Specification.new do |s|
-  s.name = 'openc3-cosmos-gpredict'
-  s.summary = 'OpenC3 Plugin for Gpredict'
+  s.name = 'openc3-cosmos-gnuradio'
+  s.summary = 'OpenC3 Plugin for GNUradio'
   s.description = <<-EOF
-    OpenC3 plugin to communicate with Gpredict, enabling the request and retrieval of the tracking satellite position, in azimuth and elevation angles of the observable sky, together with the Doppler-corrected communication frequencies of the satellite.
+    OpenC3 plugin to communicate with GNUradio, enabling the start and stop of recordings, and adjusting the communication frequencies during runtime.
   EOF
   s.license = 'MIT'
   s.authors = ['Pedro Andrade']

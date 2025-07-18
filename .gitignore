@@ -49,3 +49,5 @@ node_modules
 typescript
 
 todo.txt
+
+__pycache__/
