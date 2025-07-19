@@ -1,5 +1,7 @@
 # OpenC3 COSMOS Ground Station
 
+![Screenshot](screenshot.png)
+
 OpenC3 COSMOS is a cloud native, containerized, microservice oriented command and control system, enabling an all-in-one management platform. This repository will host the files and documentation required to build a custom ground station for a ghost satellite mission.
 
 A few concepts are required to understand COSMOS. A short summary was written based on the [official documentation](https://docs.openc3.com/docs/configuration):
