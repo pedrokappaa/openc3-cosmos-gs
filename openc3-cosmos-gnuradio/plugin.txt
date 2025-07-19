@@ -1,11 +1,11 @@
 ## GNURADIO interface
 
 # Set VARIABLEs to allow variation in your plugin
-VARIABLE gpredict_rotctld_target_name GNURADIO
-VARIABLE gpredict_rotctld_host host.docker.internal
-VARIABLE gpredict_rotctld_port 52001
+VARIABLE gnuradio_target_name GNURADIO
+VARIABLE gnuradio_host host.docker.internal
+VARIABLE gnuradio_port 52001
 
 # Set target interface
-TARGET GNURADIO <%= gpredict_rotctld_target_name %>
-INTERFACE <%= gpredict_rotctld_target_name %>_INT openc3/interfaces/tcpip_client_interface.py  <%= gpredict_rotctld_host %> <%= gpredict_rotctld_port %> <%= gpredict_rotctld_port %> 5.0 5.0 BURST
-  MAP_TARGET <%= gpredict_rotctld_target_name %>
+TARGET GNURADIO <%= gnuradio_target_name %>
+INTERFACE <%= gnuradio_target_name %>_INT openc3/interfaces/tcpip_client_interface.py <%= gnuradio_host %> <%= gnuradio_port %> <%= gnuradio_port %> 5.0 5.0 BURST
+  MAP_TARGET <%= gnuradio_target_name %>

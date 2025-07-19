@@ -1,0 +1,50 @@
+[
+  {
+    "screen": "BEACON_DATA",
+    "target": "GNURADIO",
+    "floated": false,
+    "top": 0,
+    "left": 0,
+    "zIndex": 0
+  },
+  {
+    "screen": "BEACON_HEADER",
+    "target": "GNURADIO",
+    "floated": false,
+    "top": 0,
+    "left": 0,
+    "zIndex": 0
+  },
+  {
+    "screen": "FREQ_DPLR",
+    "target": "GPREDICT_RIGCTLD_RX",
+    "floated": false,
+    "top": 0,
+    "left": 0,
+    "zIndex": 0
+  },
+  {
+    "screen": "FREQ_DPLR",
+    "target": "GPREDICT_RIGCTLD_TX",
+    "floated": false,
+    "top": 100,
+    "left": 739,
+    "zIndex": 0
+  },
+  {
+    "screen": "POS_AZEL",
+    "target": "GPREDICT_ROTCTLD",
+    "floated": false,
+    "top": 0,
+    "left": 0,
+    "zIndex": 0
+  },
+  {
+    "screen": "POS_STATUS",
+    "target": "GPREDICT_ROTCTLD",
+    "floated": false,
+    "top": 124,
+    "left": 1190,
+    "zIndex": 1
+  }
+]

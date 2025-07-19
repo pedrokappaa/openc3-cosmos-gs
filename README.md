@@ -172,66 +172,71 @@ Following its [installation guide](https://hamlib.sourceforge.net/manuals/1.2.15
 
 <br /> 
 
-## Setting up a new COSMOS project
+## Getting started
 
-After installing OpenC3 COSMOS and launching the GUI, a demo plugin comes already installed in the project template to help the user get accomodated to the platform capabilities. We will leverage the project template for our application, however, a clean start is desired, so before implementing any developments, the demo plugin should be disabled:
+Cloning this repository and running the `start.sh` script is likely enough to get you going. However, a basic tutorial was made on how each important part of the software was created, leaving some tips and learned lessons for those who want to replicate in their own way.
 
-1. Go to `/openc3-cosmos-gs` folder and open `.env` file;
+### Setting up a new COSMOS project
 
-2. Comment `OPENC3_DEMO` variable on line 6:
+After installing OpenC3 COSMOS and launching the GUI, a demo plugin comes already installed in the project template to help the user get accomodated to the platform capabilities. We leveraged the project template for our application, however, a clean start was desired, so before implementing any developments, the demo plugin was disabled:
+
+1. Went to `/openc3-cosmos-gs` folder and open `.env` file;
+
+2. Commented `OPENC3_DEMO` variable on line 6:
 ```bash
 # OPENC3_DEMO=1
 ```
 
-3. On COSMOS GUI, go to Admin Console > Plugins, and uninstall `openc3-cosmos-demo` plugin if present.
+3. On COSMOS GUI, went to Admin Console > Plugins, and uninstalled `openc3-cosmos-demo` plugin.
 
-Next, we can start implementing our first plugin to obtain the satellite position, as it is the initial and main driver in our operation pipeline. All other steps, such as orientating the antennas or communicating with the satellite, are dependent on its position, since they only begin once it starts appearing in our visible sky. Several programs track satellites, but we'll be using Gpredict to achieve this purpose.
+Next, our first plugin to obtain the satellite position was implemented, as it is the initial and main driver in the operation pipeline. All other steps, such as orientating the antennas or communicating with the satellite, are dependent on its position, since they only begin once it starts appearing in our visible sky. Several programs track satellites, but Gpredict was used to achieve this purpose.
 
 Following the [documentation](https://docs.openc3.com/docs/getting-started/gettingstarted):
 
-> 1. Use the COSMOS plugin generator to create the correct structure:
+> 1. Used the COSMOS plugin generator to create the correct structure:
 >
 >```bash
 >user@machine ~/openc3-cosmos-gs
 >$ openc3.sh cli generate plugin gpredict --python
 >```
 
-This generates `openc3-cosmos-gpredict` plugin folder, where we'll implement all the information needed to communicate with Gpredict application. In this plugin, there is only one target: the Gpredict application itself, or more specifically, its network interface. The same plugin can have multiple targets with different configurations, but will be not necessary for now.
+The `openc3-cosmos-gpredict` plugin folder was generated to include all the necessary components for communicating with the Gpredict application. Within this plugin, three targets were defined:
 
-> 2. Generate a new target in the plugin folder:
+1. A `rotctld` interface for retrieving the satellite’s position;
+2. A `rigctld` interface for retrieving the satellite’s transmit (TX) frequency, corrected for Doppler shift;
+3. A second `rigctld` interface for retrieving the satellite’s receive (RX) frequency, also Doppler-corrected.
+
+To support this, only two unique target structures needed to be created: `GPREDICT_ROTCLTD` and `GPREDICT_RIGCLTD`. The structure of `GPREDICT_RIGCLTD` (primarily commands and telemetry) could be shared for both the TX and RX interfaces.
+
+> 2. The `GPREDICT_RIGCLTD` target was generated in the plugin folder with:
 >
 >```bash
 >user@machine ~/openc3-cosmos-gpredict
->$ openc3.sh cli generate target GPREDICT --python
+>$ openc3.sh cli generate target GPREDICT_RIGCLTD --python
 >```
 
-A new `GPREDICT` folder with be created unded `/targets`, where a scaffolding of the remaining concepts (commands, telemetry, conversions) will be implemented, obviously specific to this target. Before proceeding, we must discover how Gpredict communicates to prepare the COSMOS connection.
+Two new folders were created under `/targets`, where a scaffolding of the remaining concepts (commands, telemetry, conversions) were implemented, obviously specific to these targets.
 
 
 <br /> 
 
-## Retrieve satellite position from Gpredict
+## Retrieve satellite position and frequencies from Gpredict
 
-This method basically uses Gpredict compatibility with `rotctld` as a data pass-thru. Based on [Joshua Guthrie's tutorial](http://westmouthbay.com/2020/01/10/getting-pointing-information-from-gpredict-for-use-in-an-external-program/):
+This method basically uses Gpredict compatibility with `rotctld` and `rigctld` as a data pass-through. Based on [Joshua Guthrie's tutorial](http://westmouthbay.com/2020/01/10/getting-pointing-information-from-gpredict-for-use-in-an-external-program/):
 
-> 1. Start Gpredict and configure the ground station details and satellite to track;
+> 1. Gpredict was started, and the ground station details and satellite to track were configured;
 >
-> 2. Setup a dummy rotator interface in Gpredict, on Edit > Preferences > Interfaces > Rotators;
+> 2. A dummy rotator interface in Gpredict was defined, on Edit > Preferences > Interfaces > Rotators;
 >
-> 3. Define a host and port (localhost:4533 will do);
+> 3. An host and port for the TCP interface were selected (localhost:4533);
 >
-> 4. Enable a 'rotctld' service instance on a new shell:
+> 4. A `rotctld` service instance was started;
 >
-> ```bash
-> user@machine ~
-> $ rotctld &
-> ```
+> 5. In Menu > Antenna Control, the desired satellite was chosen;
 >
-> 5. Go to Menu > Antenna Control, and select the desired satellite;
+> 6. Pressing 'Engage', then 'Track' will finish the setup;
 >
-> 6. Press 'Engage', then 'Track';
->
-> 7. Confirm if the interface is running on the defined host and port:
+> 7. Confirmation of the TCP interface running can be checked on the defined host and port:
 > 
 > ```bash
 > user@machine ~
@@ -239,39 +244,62 @@ This method basically uses Gpredict compatibility with `rotctld` as a data pass-
 > get_pos:-Azimuth: 294.51-Elevation: 26.09-RPRT 0
 >```
 
+This process was repeated for the remaining two interfaces of `rigctld`:
+
+8. Two dummy radio interfaces in Gpredict were defined, on Edit > Preferences > Interfaces > Radios, one `RX only` and other `TX only` types;
+
+9. The ports 4532 and 4531 of localhost were selected, respectively;
+
+10. Each `rigctld` service instance was started on the respective port;
+
+11. In Menu > Radio Control, desired satellite was chosen again;
+
+12. Selecting the two devices, pressing 'Engage' and 'Track' will make the deal;
+
+13. Again, confirmation of the TCP interfaces running can be performed on the defined host and port:
+
+```bash
+user@machine ~
+$ echo "-f" | nc -w 1 localhost 4532
+get_freq:-Frequency: 145000000-RPRT 0
+```
+
 <br /> 
 
-## Request satellite position on COSMOS
+## Request satellite position and frequencies on COSMOS
 
-With this previous knowledge, we just have to configure COSMOS plugin to send a string (command) `"-p"` to the defined `localhost:4533` via TCP/IP (interface), where a `get_pos` string (telemetry) will be responded with the desired azimuth and elevation angles. 
+With this previous knowledge, the COSMOS plugin was configured to send a string (command) `"-p"` to the defined `rotctld` target, hosted on `localhost:4533` via TCP/IP (interface), where a `get_pos` string (telemetry) is responded with the desired azimuth and elevation angles. Additionally, a similar approach was adopted for both `rigctld` targets, by sending the `"-f"` command, with a `get_freq` response, as observed on the above code snippets. The distinction on RX and TX frequencies is made depending on the desired target.
 
 <br /> 
 
 ### Create the command packet structure
 
-The described command was then added to the `cmd.txt` file of `GPREDICT` target, following [commands documentation](https://docs.openc3.com/docs/configuration/command):
+The described commands were then added to the `cmd.txt` files of each target, following [commands documentation](https://docs.openc3.com/docs/configuration/command). Here's the implementation for `GPREDICT_ROTCTLD` target, as example:
 
 ```ruby
-COMMAND GPREDICT SAT_POS_AZEL_CMD BIG_ENDIAN "Request satellite position"
-    # Keyword           Name  BitSize Type   Min Max  Default  Description
-    APPEND_ID_PARAMETER ID    0       STRING          "-p"     "Position argument"
+COMMAND GPREDICT_ROTCTLD SAT_POS_AZEL_CMD BIG_ENDIAN "Request satellite position"
+  # Keyword           Name  BitSize Type   Min Max  Default  Description
+  APPEND_ID_PARAMETER ID    0       STRING          "-p"     "Get position argument"
 ```
 
 <br /> 
 
 ### Create the telemetry packet structure
 
-Similarly, the telemetry packet was configured so that the incoming data can be parsed to extract the intended azimuth and elevation. As such, the following code was added to the respective `tlm.txt` file of the same target, following [telemetry documentation](https://docs.openc3.com/docs/configuration/telemetry):
+Similarly, the telemetry packets that are responded for each command were configured so that the incoming data can be parsed to extract the intended information (position or frequency, depending on the target). As such, the telemetry packets were defined in the respective `tlm.txt` file of each target, following [telemetry documentation](https://docs.openc3.com/docs/configuration/telemetry). Here's the implementation for `GPREDICT_ROTCTLD` target, as example:
+
 ```ruby
-TELEMETRY GPREDICT SAT_POS_AZEL BIG_ENDIAN "Satellite position"
-    # Keyword       Name    BitSize Type    Default     Description
-    APPEND_ID_ITEM  ID      64      STRING  "get_pos:"  "Position packet identifier"
-    APPEND_ITEM     AZ_STR  128     STRING              "Azimuth string data"    
-    APPEND_ITEM     EL_STR  0       STRING              "Elevation string data"
-    ITEM            AZ      0 0     DERIVED             "Azimuth"
-        READ_CONVERSION azimuth_conversion.py
-    ITEM            EL      0 0     DERIVED             "Elevation"
-        READ_CONVERSION elevation_conversion.py
+TELEMETRY GPREDICT_ROTCTLD SAT_POS_AZEL_PKT BIG_ENDIAN "Satellite position"
+  # Keyword       Name    BitSize Type    Default     Description
+  APPEND_ID_ITEM  ID      64      STRING  "get_pos:"  "Position packet identifier"
+  APPEND_ITEM     AZ_STR  128     STRING              "Azimuth string data"    
+  APPEND_ITEM     EL_STR  0       STRING              "Elevation string data"
+  ITEM            AZ      0 0     DERIVED             "Azimuth"
+    READ_CONVERSION azimuth_conversion.py
+    UNITS Degrees deg
+  ITEM            EL      0 0     DERIVED             "Elevation"
+    READ_CONVERSION elevation_conversion.py
+    UNITS Degrees deg
 ```
 
 This way, the incoming data is first divided into three strings: 
@@ -285,6 +313,10 @@ match = re.search(r'Azimuth:\s*([\d.]+)', packet.read("AZ_STR"))
 return float(match.group(1))
 ```
 
+Lastly, the units are added to complement the data when screening the variables. 
+
+A very similar approach is made to `GPREDICT_RIGCTLD` targets.
+
 <br /> 
 
 ### Configure the interface
@@ -292,15 +324,35 @@ return float(match.group(1))
 Lastly, the `gpredict` plugin interface was configured on `plugin.txt` file, following the [interfaces documentation](https://docs.openc3.com/docs/configuration/interfaces):
 
 ```ruby
-# Set VARIABLEs to allow variation in your plugin
-VARIABLE gpredict_target_name GPREDICT
-VARIABLE gpredict_host host.docker.internal
-VARIABLE gpredict_port 4533
+## ROTCTLD interface
 
-# Set target interface
-TARGET GPREDICT <%= gpredict_target_name %>
-INTERFACE <%= gpredict_target_name %>_INT openc3/interfaces/tcpip_client_interface.py <%= gpredict_host %> <%= gpredict_port %> <%= gpredict_port %> 5.0 5.0 BURST
-  MAP_TARGET <%= gpredict_target_name %>
+VARIABLE gpredict_rotctld_target_name GPREDICT_ROTCTLD
+VARIABLE gpredict_rotctld_host host.docker.internal
+VARIABLE gpredict_rotctld_port 4533
+
+TARGET GPREDICT_ROTCTLD <%= gpredict_rotctld_target_name %>
+INTERFACE <%= gpredict_rotctld_target_name %>_INT openc3/interfaces/tcpip_client_interface.py  <%= gpredict_rotctld_host %> <%= gpredict_rotctld_port %> <%= gpredict_rotctld_port %> 5.0 5.0 BURST
+  MAP_TARGET <%= gpredict_rotctld_target_name %>
+
+## RIGCTLD RX interface
+
+VARIABLE gpredict_rigctld_target_name_rx GPREDICT_RIGCTLD_RX
+VARIABLE gpredict_rigctld_host_rx host.docker.internal
+VARIABLE gpredict_rigctld_port_rx 4532
+
+TARGET GPREDICT_RIGCTLD <%= gpredict_rigctld_target_name_rx %>
+INTERFACE <%= gpredict_rigctld_target_name_rx %>_INT openc3/interfaces/tcpip_client_interface.py <%= gpredict_rigctld_host_rx %> <%= gpredict_rigctld_port_rx %> <%= gpredict_rigctld_port_rx %> 5.0 5.0 BURST
+  MAP_TARGET <%= gpredict_rigctld_target_name_rx %>
+
+## RIGCTLD TX interface
+
+VARIABLE gpredict_rigctld_target_name_tx GPREDICT_RIGCTLD_TX
+VARIABLE gpredict_rigctld_host_tx host.docker.internal
+VARIABLE gpredict_rigctld_port_tx 4531
+
+TARGET GPREDICT_RIGCTLD <%= gpredict_rigctld_target_name_tx %>
+INTERFACE <%= gpredict_rigctld_target_name_tx %>_INT openc3/interfaces/tcpip_client_interface.py <%= gpredict_rigctld_host_tx %> <%= gpredict_rigctld_port_tx %> <%= gpredict_rigctld_port_tx %> 5.0 5.0 BURST
+  MAP_TARGET <%= gpredict_rigctld_target_name_tx %>
 ```
 
 The target name, host, and port were defined as variables to allow customization in web GUI, if intended. Consequently, the TCP/IP client interface setup was done with respect to the host and port variables. Three arguments are required on the `INTERFACE` after the port number: 
@@ -311,24 +363,26 @@ The target name, host, and port were defined as variables to allow customization
 
 The host was defaulted to `host.docker.internal`, instead of `localhost`, as it is containerized.
 
+The three desired targets were instanced here, one with the `GPREDICT_ROTCTLD` structure and two with the `GPREDICT_RIGCTLD` structure.
+
 <br /> 
 
 ### Build the plugin
 
-Finally, we can build our plugin and upload it to COSMOS. First, the `.gemspec` and `LICENSE` files should be updated. Then, following the [documentation](https://docs.openc3.com/docs/getting-started/gettingstarted):
+Finally, the plugin can be built and uploaded to COSMOS. First, the `.gemspec` and `LICENSE` files were updated. Then, following the [documentation](https://docs.openc3.com/docs/getting-started/gettingstarted):
 
-> 1. Build the plugin, specifying its version: 
+> 1. The plugin was built, specifying its version: 
 >
 >```bash
 > user@machine ~/openc3-cosmos-gs/openc3-cosmos-gpredict
 > $ openc3.sh cli rake build VERSION=1.0.0
 >```
 >
-> 2. Once built, open the web GUI and return to Admin Console > Plugins;
+> 2. Once built, the web GUI was open, then following Admin Console > Plugins;
 >
-> 3. Click on "Install new plugin", select the generated  `openc3-cosmos-gpredict-1.0.0.gem` file and press "Upload";
+> 3. Clicked on "Install new plugin", selected the generated  `openc3-cosmos-gpredict-1.0.0.gem` file and pressed "Upload";
  
-The `VARIABLES` pop-up should appear for customization, but it is not mandatory to modify anything.
+The `VARIABLES` pop-up appeared for customization, but it was not mandatory to modify anything, as the default and intended values were defined on `plugin.txt`.
 
 > 4. If changes are made to the plugin source code, rebuild the plugin with a new `VERSION` number, following step 1 and 2;
 > 
@@ -338,13 +392,13 @@ The `VARIABLES` pop-up should appear for customization, but it is not mandatory 
 
 ### Communicate with the target
 
-Once the plugin is loaded to COSMOS, we shall obtain the satellite position from Gpredict.
+Once the plugin was loaded to COSMOS, the satellite position from Gpredict was obtained:
 
-1. On the web GUI, go to CmdTlmServer side tab > Interfaces, and confirm that the interface `GPREDICT_INT` is connected and ready for communication;
+1. On the web GUI, follow to CmdTlmServer side tab > Interfaces, and confirm that the interface `GPREDICT_INT` is connected and ready for communication;
 
-2. Then, go to Command Sender side tab, select the `GPREDICT` target and `SAT_POS_AZEL_CMD` command packet, and hit "Send";
+2. Then, go to Command Sender side tab, select the `GPREDICT_ROTCLTD` target and `SAT_POS_AZEL_CMD` command packet, and hit "Send";
 
-3. Finally, go to Packet Viewer side tab, select the `GPREDICT` target and `SAT_POS_AZEL` telemetry packet, where all items should be successfully parsed and displayed;
+3. Finally, go to Packet Viewer side tab, select the `GPREDICT_ROTCLTD` target and `SAT_POS_AZEL_PKT` telemetry packet, where all items should be successfully parsed and displayed;
 
 4. These will be very similar to the ones on Gpredict, with the exception of the delay offset of transmission and the defined time and step thresholds.
 
@@ -358,3 +412,184 @@ while True:
   wait(5)
 ```
 6. Then, go to Telemetry Grapher, select the converted `AZ` and `EL` items and add each  to the plot. A new data point should be drawn at a 5 seconds interval.
+
+Similarly, the frequency requests were performed by adjusting the target and command names.
+
+<br /> 
+
+## Interfacing with GNUradio
+
+Another plugin was developed to interface the OpenC3 COSMOS with GNUradio, achieving two purposes:
+
+1. Start and stop the radio recordings, as well as adjusting the communication frequencies;
+
+2. Send the commands and parse the telemetry sent by the satellite.
+
+A simple GNUradio flowchart was defined on `gnuradio-src` folder, to test these purposes. Succintly, a TCP server was started on port 52001, where an example packet from a file is sent to, and, on the same port, a command parser was added to interpret the commands received. As no hardware was available, a simulated wave source was added with some plots to simulate the spectrum.
+
+On COSMOS, the telemetry packet was defined as follows, mimicking the beacon packet of PROMETHEUS-1, and the packet saved on the file:
+
+```ruby
+TELEMETRY GNURADIO SAT_BEACON_PKT LITTLE_ENDIAN "Satellite beacon packet"
+  # Keyword       Name          BitSize Type  Default   Description
+  APPEND_ITEM     LENGTH        8       UINT            "Payload length"
+  APPEND_ITEM     DESTINATION   8       UINT            "Destination address"
+  APPEND_ITEM     NODE          8       UINT            "Source address"
+  APPEND_ITEM     IDENTIFIER    8       UINT            "Identifiers"
+  APPEND_ITEM     FLAGS         8       UINT            "Flags"
+  APPEND_ID_ITEM  PACKET_ID     8       UINT  "2"       "Packet type ID"
+  APPEND_ITEM     STATE_INDEX   8       UINT            "System state index"
+  APPEND_ITEM     SAT_FLAGS     8       UINT            "Beacon flags"
+  APPEND_ITEM     ERR_COUNT     16      UINT            "Software error count"
+  APPEND_ITEM     BOOT_COUNT    16      UINT            "Boot count"
+  APPEND_ITEM     PAD_BYTE      16      UINT            "Padding"
+  APPEND_ITEM     BATT_V        32      FLOAT           "Battery voltage"
+    UNITS Voltage V
+  APPEND_ITEM     CPU_TEMP      32      FLOAT           "CPU temperature"
+    UNITS Celsius C
+  APPEND_ITEM     IMU_TEMP      32      FLOAT           "IMU temperature"
+    UNITS Celsius C
+  APPEND_ITEM     GYRO_0        32      FLOAT           "Gyroscope X"
+    UNITS RadiansPerSecond rad/s
+  APPEND_ITEM     GYRO_1        32      FLOAT           "Gyroscope Y"
+    UNITS RadiansPerSecond rad/s
+  APPEND_ITEM     GYRO_2        32      FLOAT           "Gyroscope Z"
+    UNITS RadiansPerSecond rad/s
+  APPEND_ITEM     MAG_0         32      FLOAT           "Magnetometer X"
+    UNITS NanoTestas nT
+  APPEND_ITEM     MAG_1         32      FLOAT           "Magnetometer Y"
+    UNITS NanoTestas nT
+  APPEND_ITEM     MAG_2         32      FLOAT           "Magnetometer Z"
+    UNITS NanoTestas nT
+  APPEND_ITEM     ACCEL_0       32      FLOAT           "Accelerometer X"
+    UNITS MetersPerSecondSquared m/s2
+  APPEND_ITEM     ACCEL_1       32      FLOAT           "Accelerometer Y"
+    UNITS MetersPerSecondSquared m/s2
+  APPEND_ITEM     ACCEL_2       32      FLOAT           "Accelerometer Z"
+    UNITS MetersPerSecondSquared m/s2
+  APPEND_ITEM     RSSI_DB       32      FLOAT           "Signal strength"
+    UNITS deciBel dB
+  APPEND_ITEM     FEI_HZ        32      FLOAT           "Frequency error"
+    UNITS Hertz Hz
+  APPEND_ITEM     CHECKSUM      16      UINT            "Checksum"
+```
+
+Regarding the commands, the start, stop, and update frequency commands were also defined:
+
+```ruby
+COMMAND GNURADIO START_REC_CMD BIG_ENDIAN "Start radio recording"
+  # Keyword           Name  BitSize Type    Min  Max  Default       Description
+  APPEND_ID_PARAMETER ID    0       STRING            "aos"         "Aquisition of signal key"
+
+COMMAND GNURADIO STOP_REC_CMD BIG_ENDIAN "Start radio recording"
+  # Keyword           Name  BitSize Type    Min  Max  Default       Description
+  APPEND_ID_PARAMETER ID    0       STRING            "los"         "Loss of signal key"
+
+COMMAND GNURADIO UPDT_FREQ_RX_CMD BIG_ENDIAN "Update receiving frequency"
+  # Keyword           Name  BitSize Type    Min  Max  Default       Description
+  APPEND_ID_PARAMETER ID    64      STRING            "freq_rx "    "Frequency RX key"
+  APPEND_PARAMETER    FREQ  0       STRING            "437400000"   "Frequency RX value"
+
+COMMAND GNURADIO UPDT_FREQ_TX_CMD BIG_ENDIAN "Update receiving frequency"
+  # Keyword           Name  BitSize Type    Min  Max  Default       Description
+  APPEND_ID_PARAMETER ID    64      STRING            "freq_tx "    "Frequency TX key"
+  APPEND_PARAMETER    FREQ  0       STRING            "144700000"   "Frequency TX value"
+```
+
+Note that these commands are just for operating the GNUradio and not the satellite itself. Similarly, those should be added in the future once defined, together with the exceptions on the command parser of GNUradio, thus enabling the data translation to RF signals.
+
+Additionally, to implement the start and stop commands, some code must be written to determine when the satellite appears and disappears on the visible sky. This was done on the main `loop_request.py` script, which also interacts with Gpredict and GNUradio to operate the ground station. The code is commented below:
+
+```python
+while True:
+  # Request satellite position
+  cmd("GPREDICT_ROTCTLD SAT_POS_AZEL_CMD with ID '-p'")
+  
+  # Read satellite position response
+  az = tlm("GPREDICT_ROTCTLD SAT_POS_AZEL_PKT AZ")
+  el = tlm("GPREDICT_ROTCTLD SAT_POS_AZEL_PKT EL")
+  
+  # Request satellite frequency
+  cmd("GPREDICT_RIGCTLD_TX SAT_FREQ_DPLR_CMD with ID '-f'")
+  cmd("GPREDICT_RIGCTLD_RX SAT_FREQ_DPLR_CMD with ID '-f'")
+  
+  # Read satellite frequency response
+  freq_tx = tlm("GPREDICT_RIGCTLD_TX SAT_FREQ_DPLR_PKT FREQ_DPLR_EXT")
+  freq_rx = tlm("GPREDICT_RIGCTLD_RX SAT_FREQ_DPLR_PKT FREQ_DPLR_EXT")
+
+  # Verify if it is above the horizon
+  if az > 0 and el > 0:
+    ON_SIGHT = "TRUE"
+  else:
+    ON_SIGHT = "FALSE"
+  
+  # Trigger recording if script started mid passing
+  if start == "TRUE" and ON_SIGHT == "TRUE":
+    cmd("GNURADIO START_REC_CMD with ID 'aos'")
+  
+  # Create trigger interrupts for radio operation
+  if on_sight_last == "FALSE" and ON_SIGHT == "TRUE":
+    AOS = "TRUE"
+    cmd("GNURADIO START_REC_CMD with ID 'aos'")
+    
+  elif on_sight_last == "TRUE" and ON_SIGHT == "FALSE":
+    LOS = "TRUE"
+    cmd("GNURADIO STOP_REC_CMD with ID 'los'")
+   
+  else:
+    AOS = "FALSE"
+    LOS = "FALSE"
+  
+  # Save variable for next iteration
+  on_sight_last = ON_SIGHT
+  start = "FALSE"
+  
+  # Save simulated track telemetry to show on screen
+  inject_tlm("GPREDICT_ROTCTLD", "SAT_POS_STATUS", {"AOS": AOS, "ON_SIGHT": ON_SIGHT, "LOS": LOS})
+  
+  # Update radio frequencies regarding Doppler effect
+  if ON_SIGHT == "TRUE":
+    cmd("GNURADIO", "UPDT_FREQ_TX_CMD", {"ID": "freq_tx ", "FREQ": str(int(freq_tx))})
+    cmd("GNURADIO", "UPDT_FREQ_RX_CMD", {"ID": "freq_rx ", "FREQ": str(int(freq_rx))})
+  
+  # Delay in seconds
+  wait(1)
+```
+
+This script is ran on Script Runner tab. In addition, a Telemetry Viewer panel was arranged, showing all telemetry, collected from all sources. It can be loaded in File > Open configuration > Control Panel. Finally, a small bash script was written to initialize all programs needed for operation, except the Gpredict "Track" and "Engage" actions that must be conducted manually. The `start.sh` script was implemented as follows:
+
+```bash
+#! /usr/bin/bash
+
+# Start OpenC3 COSMOS
+./openc3.sh run &
+
+# Start rig/rotctld TCP interfaces with Gpredict 
+rotctld --port=4533 &
+rigctld --port=4532 &
+rigctld --port=4531 &
+
+# Start Gpredict
+gpredict &
+
+# Start GNUradio flowchart
+python3 gnuradio-src/gnuradio_openc3.py
+
+# After closing app, kill all processes
+killall rotctld & killall rigctld & killall gpredict
+./openc3.sh stop
+```
+
+<br /> 
+
+## Future work
+
+Here's a list of some topics that require development:
+
+1. Establish the final telemetry and command packets, implementing the necessary code for them in OpenC3 COSMOS and GNUradio;
+2. Improve Telemetry Viewer with [more graphical information](https://docs.openc3.com/docs/tools/tlm-viewer) and develop the autonomous mission control approach;
+3. Connect the radio hardware to computer and interface it with GNUradio;
+4. Implement a [LoRa software (de)modulator](https://github.com/tapparelj/gr-lora_sdr) if hardware is not capable;
+5. Test the satellite to ground station communication pipeline and viceversa;
+6. Connect the antenna controller to computer and interface it;
+7. Test the tracking system with orbiting satellites;

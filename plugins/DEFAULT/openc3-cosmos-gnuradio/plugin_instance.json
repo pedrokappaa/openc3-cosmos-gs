@@ -1,0 +1,23 @@
+{
+  "name": "openc3-cosmos-gnuradio-1.1.2.gem__20250719035034",
+  "variables": {
+    "gnuradio_target_name": "GNURADIO",
+    "gnuradio_host": "host.docker.internal",
+    "gnuradio_port": "52001"
+  },
+  "plugin_txt_lines": [
+    "## GNURADIO interface",
+    "",
+    "# Set VARIABLEs to allow variation in your plugin",
+    "VARIABLE gnuradio_target_name GNURADIO",
+    "VARIABLE gnuradio_host host.docker.internal",
+    "VARIABLE gnuradio_port 52001",
+    "",
+    "# Set target interface",
+    "TARGET GNURADIO <%= gnuradio_target_name %>",
+    "INTERFACE <%= gnuradio_target_name %>_INT openc3/interfaces/tcpip_client_interface.py <%= gnuradio_host %> <%= gnuradio_port %> <%= gnuradio_port %> 5.0 5.0 BURST",
+    "  MAP_TARGET <%= gnuradio_target_name %>"
+  ],
+  "needs_dependencies": true,
+  "updated_at": 1752897037219323215
+}
